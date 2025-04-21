@@ -107,13 +107,15 @@ body {
     flex-direction: row;
     width: 100%;
     .open_chat_body_received-message {
+      position: relative; /* necessário para o posicionamento absoluto interno */
+      display: inline-block;
+      padding: 10px 20px 20px 10px;
       justify-self: flex-start;
-      padding: 0.3rem;
       margin: 0px 5px 5px 5px;
       width: fit-content;
       min-height: 35px;
       min-width: 10rem;
-      max-width: 35rem;
+      max-width: 60%;
       background-color: rgba(0, 0, 0, 0.705);
       border-radius: 0px 8px 8px 8px;
       border: solid 1px #0000003f;
@@ -122,19 +124,22 @@ body {
       padding-right: 0.5rem;
     }
     .open_chat_body_received-message-time {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-      margin-top: -0.5rem;
+      position: absolute;
+      bottom: 5px;
+      right: 10px;
+      font-size: 0.7rem;
+      color: #ccc;
     }
     .open_chat_body_sent-message {
+      position: relative; /* necessário para o posicionamento absoluto interno */
+      display: inline-block;
+      padding: 10px 20px 10px 10px;
       justify-self: flex-end;
-      padding: 0.3rem;
       margin: 5px 5px 5px 5px;
       width: fit-content;
       min-height: 35px;
       min-width: 60px;
-      max-width: 35rem;
+      max-width: 60%;
       background-color: rgba(13, 74, 99, 0.808);
       border-radius: 8px 0px 8px 8px;
       border: solid 1px #0000003f;
@@ -148,10 +153,41 @@ body {
       white-space: pre-wrap;
     }
     .open_chat_body_sent-message-time {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-      margin-top: -0.5rem;
+      position: absolute;
+      bottom: 5px;
+      right: 10px;
+      font-size: 0.7rem;
+      color: #ccc;
     }
+  }
+}
+.open_chat_body_footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0px;
+  width: 100%;
+  height: 3.5rem;
+  background-color: rgba(0, 0, 0, 0.349);
+  .open_chat_body_footer-input {
+    width: 80%;
+    height: 30%;
+    padding: 0.5rem;
+    margin: 0px 5px 5px 5px;
+    background-color: #f0f0f0bb;
+    border-radius: 8px;
+    border: solid 1px #0000003f;
+    color: #000000;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  .open_chat_body_footer-input:focus {
+    background-color: #ffffffd5;
+    outline: none;
+  }
+  .open_chat_body_footer-send {
+    font-size: 1.5rem;
+    color: #f0f0f0;
   }
 }
