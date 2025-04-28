@@ -6,23 +6,21 @@ import ChatFooter from "./ChatFooter";
 import ChatMessagesContainer from "./ChatMessagesContainer";
 import { useState, useEffect } from "react";
 
-export default function OpenChat() {
+export default function OpenChat({ data }) {
   const [messages, setMessages] = useState([]);
-
+  const [profile, setProfile] = useState({});
+  const [isReady, setIsReady] = useState(false);
+  console.log("OpenChat mesages: ", data.messages);
   useEffect(() => {
-    // Simulando mensagens anteriores (pode vir de API, localStorage etc.)
-    const previousMessages = [
-      {
-        mode: "received",
-        text: "“The night has a thousand eyes, And the day but one; Yet the light of the bright world dies With the dying sun.",
-      },
-      {
-        mode: "sent",
-        text: "The mind has a thousand eyes, the heart but one, Yet the ligth of a whole life dies, when love is done",
-      },
-    ];
-    setMessages(previousMessages);
-  }, []);
+    //console.log("OpenChat disparou useEffect");
+    if (data && data.messages && data.profile) {
+      // só entra se data estiver ok
+      setMessages(data.messages);
+      setProfile(data.profile);
+      setIsReady(true);
+      //console.log("Entrou no if de useeffect");
+    }
+  }, [data.messages, data.profile]);
 
   const handleSendMessage = (newMessage) => {
     setMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -30,9 +28,9 @@ export default function OpenChat() {
 
   return (
     <div>
-      <ChatHeader />
+      <ChatHeader profile={data.profile} />
       <ChatMessagesContainer messages={messages} />
-      <ChatFooter onSendMessage={handleSendMessage} />
+      <ChatFooter onSendMessage={handleSendMessage} profile={data.profile} />
     </div>
   );
 }
