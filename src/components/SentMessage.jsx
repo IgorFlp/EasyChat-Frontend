@@ -11,7 +11,7 @@ const SentMessage = ({ message }) => {
     <div className="open_chat_body_message-row">
       <div className="open_chat_body_sent-message">
         <label className="open_chat_body_sent-message-text">
-          {message.text.body}
+          {message.text}
         </label>
         <label className="open_chat_body_sent-message-time">{timestamp}</label>
       </div>

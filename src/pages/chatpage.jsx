@@ -8,7 +8,7 @@ const ChatPage = () => {
 
   const handleSelectChat = (profile, messages) => {
     /*console.log(
-      "Select chat ativo chatpage" +
+      "Select chat ativo chatpage " +
         JSON.stringify(messages) +
         " " +
         JSON.stringify(profile)

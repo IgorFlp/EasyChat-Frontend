@@ -6,8 +6,15 @@ const ChatList = ({ onOpenChat }) => {
   const [groupedArray, setGroupedArray] = useState([]);
   const [messages, setMessages] = useState([]);
   const [profile, setProfile] = useState([]);
+  const [contacts, setContacts] = useState([]);
 
   const handleSelectChat = (profile, messages) => {
+    /*console.log(
+      "Select chat ativo chatlist " +
+        JSON.stringify(messages) +
+        " " +
+        JSON.stringify(profile)
+    );*/
     setMessages(() => [messages]);
     setProfile(() => [profile]);
     onOpenChat(profile, messages);
@@ -18,21 +25,23 @@ const ChatList = ({ onOpenChat }) => {
       const url = "http://localhost:3000/messagesDB";
       let msgs = await axios.get(url);
       msgs = msgs.data;
-      let messages = [];
+      //console.log("msgs: " + JSON.stringify(msgs));
+      setMessages(msgs);
 
-      for (let i = 0; i < msgs.received.length; i++) {
-        messages.push(msgs.received[i].entry[0].changes[0].value);
+      /*
+      for (let i = 0; i < msgs.length; i++) {
+        messages.push(msgs.recipient[i]);
       }
       for (let i = 0; i < msgs.sent.length; i++) {
         messages.push(msgs.sent[i]);
-      }
+      }*/
 
-      const groupedMessages = messages.reduce((acc, msg) => {
+      const groupedMessages = msgs.reduce((acc, msg) => {
         let number;
-        if (msg.messages) {
-          number = msg.messages[0].from;
+        if (msg.mode === "sent") {
+          number = msg.recipient;
         } else {
-          number = msg.to;
+          number = msg.sender;
         }
         if (!acc[number]) {
           acc[number] = [];
@@ -45,8 +54,32 @@ const ChatList = ({ onOpenChat }) => {
       setGroupedArray(groupedArray);
       //console.log(groupedArray);
     };
+    const fetchContacts = async () => {
+      let contacts = [];
+      try {
+        const url = "http://localhost:3000/contacts";
+        let contacts = await axios.get(url);
+        if (
+          !contacts.data ||
+          contacts.data.length === 0 ||
+          contacts.response.status == 204
+        ) {
+          console.log("Nenhum contato encontrado.");
+          contacts = [];
+        } else {
+          contacts = contacts.data;
+        }
+      } catch (error) {
+        console.error("Nenhum contato encontrado.");
+        return;
+      }
+      //console.log("contacts: " + JSON.stringify(contacts));
+      setContacts(contacts);
+    };
+    fetchContacts();
     fetchMessages();
   }, []);
+
   return (
     <>
       {groupedArray.map((group, index) => {
@@ -55,6 +88,21 @@ const ChatList = ({ onOpenChat }) => {
         return (
           <ChatItem
             key={index}
+            contact={
+              contacts.find((p) => {
+                if (msg.mode === "received") {
+                  return msg.sender;
+                }
+              }) || {
+                profile: {
+                  name: "",
+                },
+                phone:
+                  group[0].mode === "received"
+                    ? group[0].sender
+                    : group[0].recipient,
+              }
+            }
             messages={group}
             onSelectChat={handleSelectChat}
           />

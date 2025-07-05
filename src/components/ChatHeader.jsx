@@ -7,7 +7,9 @@ const ChatHeader = ({ profile }) => {
     return (
       <div className="open_chat_header">
         <img src="src\assets\chat-img.svg" alt="" className="chat_item_img" />
-        <label className="chat_item_texts-name">{profile.profile.name}</label>
+        <label className="chat_item_texts-name">
+          {profile.name ? profile.name : profile.phone}
+        </label>
       </div>
     );
   }
