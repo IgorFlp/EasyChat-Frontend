@@ -98,6 +98,8 @@ body {
 }
 .open_chat_body_messages-container {
   display: flex;
+  height: 30.6rem;
+  overflow-y: scroll;
   flex-direction: column;
   min-height: 30rem;
   background-color: #f0f0f06e;
@@ -190,4 +192,74 @@ body {
     font-size: 1.5rem;
     color: #f0f0f0;
   }
+}
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 25rem;
+  width: 25rem;
+  background-color: #00356ede;
+  border-radius: 1rem;
+  padding: 0px;
+}
+.login-inputs-row {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  input {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    &:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+  }
+}
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #232323;
+}
+
+/* Card do formulário */
+.login-container {
+  background: #003366;
+  padding: 2.5rem 2rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  width: 100%;
+  max-width: 430px;
+}
+
+/* Título */
+.login-title {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1.1;
+}
+
+/* Formulário */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Inputs */
+.login-inputs-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }

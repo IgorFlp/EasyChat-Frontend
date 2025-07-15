@@ -4,7 +4,7 @@ import ChatList from "../components/ChatList.jsx";
 import axios from "axios";
 import { io } from "socket.io-client";
 import { useState, useEffect } from "react";
-import { API_URL } from "../config";
+import { API_URL } from "../config.js";
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
@@ -41,20 +41,15 @@ const ChatPage = () => {
     };
     socket.on("new_message", handleNewMessage);
     const fetchMessages = async () => {
-      const url = "http://localhost:3000/messagesDB";
+      const url = `${API_URL}/messagesDB`;
       let msgs = await axios.get(url);
       msgs = msgs.data;
       setMessages(msgs);
-
-      //const groupedArray = Object.values(groupMessages(messages));
-      //console.log("Grouped Array: ", groupedArray);
-      //setGroupedArray(groupedArray);
-      //console.log(groupedArray);
     };
     const fetchContacts = async () => {
       let contacts = [];
       try {
-        const url = "http://localhost:3000/contacts";
+        const url = `${API_URL}/contacts`;
         let ctts = await axios.get(url);
         if (!ctts.data || ctts.data.length === 0 || ctts.status == 204) {
           console.log("Nenhum contato encontrado.");
@@ -67,29 +62,22 @@ const ChatPage = () => {
         console.log("Erro: ", error);
         return;
       }
-      //console.log("contacts: " + JSON.stringify(contacts));
+      
       setContacts(contacts);
     };
     fetchContacts();
     fetchMessages();
     return () => {
-      socket.off("new_message", handleNewMessage); // Remove listener ao desmontar
+      socket.off("new_message", handleNewMessage); 
     };
   }, []);
   useEffect(() => {
     const groupedArray = Object.values(groupMessages(messages));
     console.log("Grouped Array: ", groupedArray);
     setGroupedArray(groupedArray);
-    //console.log("mensagens atualizadas: " + JSON.stringify(messages));
   }, [messages]);
 
-  const handleSelectChat = (selectedIdentifier) => {
-    /*console.log(
-      "Select chat ativo chatpage " +
-        JSON.stringify(messages) +
-        " " +
-        JSON.stringify(profile)
-    );*/
+  const handleSelectChat = (selectedIdentifier) => {    
     const cM = groupedArray.filter((group) => {
       const gp = group.filter(
         (msg) =>
@@ -109,9 +97,6 @@ const ChatPage = () => {
     setSelectedIdentifier(selectedIdentifier);
     console.log("Selected Identifier: ", selectedIdentifier);
     console.log("Current Messages: ", cM);
-    //console.log("Current Contact: ", currentContact);
-    //console.log("Profile: " + JSON.stringify(profile));
-    //console.log("Messages: " + JSON.stringify(messages));
   };
   return (
     <div className="chat_page_container">
