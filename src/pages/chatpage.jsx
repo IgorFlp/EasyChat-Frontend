@@ -4,7 +4,8 @@ import ChatList from "../components/ChatList.jsx";
 import axios from "axios";
 import { io } from "socket.io-client";
 import { useState, useEffect } from "react";
-import { API_URL } from "../config.js";
+import { API_URL, SOCKET_URL } from "../config.js";
+import SideBar from "../components/SideBar.jsx";
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
@@ -31,7 +32,7 @@ const ChatPage = () => {
     }, []);
     return grouped;
   };
-  const socket = io(API_URL);
+  const socket = io(SOCKET_URL);
 
   useEffect(() => {
     const handleNewMessage = (msg) => {
@@ -99,7 +100,11 @@ const ChatPage = () => {
     console.log("Current Messages: ", cM);
   };
   return (
+    <>
+    
+    
     <div className="chat_page_container">
+      <SideBar/>
       <div className="chat_page_chat-list">
         <ChatList
           groupedArray={groupedArray}
@@ -109,20 +114,21 @@ const ChatPage = () => {
         />
       </div>
 
-      <div className="chat_page_chat-window">
+      <div className="chat_page_chat-window-container">
         {messages.length > 0 ? (
-          <>
+          
             <OpenChat
               profile={currentContact}
               messages={currentMessages}
               selectedIdentifier={selectedIdentifier}
             />
-          </>
+          
         ) : (
           console.log("não tem mensagens!")
         )}
       </div>
     </div>
+    </>
   );
 };
 
