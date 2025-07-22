@@ -6,7 +6,7 @@ export default function ChatFooter({ onSendMessage, profile }) {
   //console.log("ChatFooter profile: ", profile);
 
   const [input, setInput] = useState("");
-
+  //console.log("profile: ", profile);
   const sendMessage = () => {
     if (input.trim() === "") return;
 
@@ -17,16 +17,10 @@ export default function ChatFooter({ onSendMessage, profile }) {
     const timestamp = `${hour}:${minutes}`;
 
     onSendMessage({
-      _id: "",
-      messaging_product: "whatsapp",
-      to: `${profile.wa_id}`,
+      messaging_product: profile.source,
+      to: profile.source === "whatsapp" ? profile.number : profile.handle,
       type: "text",
-      text: {
-        preview_url: true,
-        body: `${input}`,
-      },
-      mode: "sent",
-      timestamp: `${timestamp}`,
+      text: { preview_url: true, body: input },
     });
     setInput(""); // limpa input
   };

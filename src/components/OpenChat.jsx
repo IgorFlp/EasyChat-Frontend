@@ -6,31 +6,56 @@ import ChatFooter from "./ChatFooter";
 import ChatMessagesContainer from "./ChatMessagesContainer";
 import { useState, useEffect } from "react";
 
-export default function OpenChat({ data }) {
-  const [messages, setMessages] = useState([]);
-  const [profile, setProfile] = useState({});
+export default function OpenChat({ messages, profile, selectedIdentifier }) {
+  //const [messages, setMessages] = useState([]);
+  //const [profile, setProfile] = useState({});
   const [isReady, setIsReady] = useState(false);
-  console.log("OpenChat mesages: ", data.messages);
   useEffect(() => {
-    //console.log("OpenChat disparou useEffect");
-    if (data && data.messages && data.profile) {
-      // só entra se data estiver ok
-      setMessages(data.messages);
-      setProfile(data.profile);
+    if ((messages && messages.length > 0) || profile) {
       setIsReady(true);
-      //console.log("Entrou no if de useeffect");
     }
-  }, [data.messages, data.profile]);
+  }, [messages, profile]);
+  const postMessage = async (message) => {
+    try {
+      const response = await fetch("http://localhost:3000/message", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(message),
+      });
 
-  const handleSendMessage = (newMessage) => {
-    setMessages((prevMessages) => [...prevMessages, newMessage]);
+      const data = await response.json();
+      //console.log("Message posted successfully:", data);
+      return data; // agora sim retorna o JSON
+    } catch (error) {
+      console.error("Error posting message:", error);
+      return null;
+    }
   };
-
+  const handleSendMessage = async (newMessage) => {
+    let msg = await postMessage(newMessage);
+    //console.log("Message sent: ", msg);
+    //setMessages((prevMessages) => [...prevMessages, msg]);
+  };
+  console.log("OpenChat messages: ", messages);
+  //console.log("OpenChat profile: ", profile);
   return (
-    <div>
-      <ChatHeader profile={data.profile} />
-      <ChatMessagesContainer messages={messages} />
-      <ChatFooter onSendMessage={handleSendMessage} profile={data.profile} />
-    </div>
+    
+      <>
+        {isReady ? (
+          <div className="chat_page_chat-window">
+            <ChatHeader
+              profile={profile}
+              selectedIdentifier={selectedIdentifier}
+            />
+            <ChatMessagesContainer messages={messages} />
+            <ChatFooter onSendMessage={handleSendMessage} profile={profile} />
+          </div>
+        ) : (
+          <div>Selecione um chat</div>
+        )}
+      </>
+    
   );
 }

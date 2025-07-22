@@ -16,23 +16,24 @@ body {
   align-items: flex-end;
   padding: 0px;
   width: 100%;
-  height: 38.5rem;
-}
-.chat_page_chat-list {
-  padding-top: 2rem;
-  width: 25%;
-  height: 100%;
-  border-right: solid 3px #0000003f;
-}
-.chat_page_chat-window {
-  width: 75%;
   height: 100%;
 }
 .chat_page_chat-list {
   display: flex;
   flex-direction: column;
-  padding: 0px;
-  height: 38.5rem;
+  padding: 0px;    
+  width: 25%;
+  height: 100%;
+  border-right: solid 3px #0000003f;
+}
+.chat_page_chat-window-container {
+  width: 75%;
+  height: 100%;
+}
+.chat_page_chat-window{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 .chat_item {
   display: flex;
@@ -95,11 +96,19 @@ body {
   }
 }
 .open_chat_body {
+  display: flex;
+    flex-direction: column;
+    min-height: 0;
+    flex-grow: 1;
 }
 .open_chat_body_messages-container {
   display: flex;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;  
+ 
   flex-direction: column;
-  min-height: 30rem;
+  
   background-color: #f0f0f06e;
   padding-top: 0.5rem;
   .open_chat_body_message-row {
@@ -173,7 +182,7 @@ body {
   .open_chat_body_footer-input {
     width: 80%;
     height: 30%;
-    padding: 0.5rem;
+    padding: 1rem;
     margin: 0px 5px 5px 5px;
     background-color: #f0f0f0bb;
     border-radius: 8px;
@@ -189,5 +198,99 @@ body {
   .open_chat_body_footer-send {
     font-size: 1.5rem;
     color: #f0f0f0;
+  }
+}
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 25rem;
+  width: 25rem;
+  background-color: #00356ede;
+  border-radius: 1rem;
+  padding: 0px;
+}
+.login-inputs-row {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  input {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    &:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+  }
+}
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #232323;
+}
+
+/* Card do formulário */
+.login-container {
+  background: #003366;
+  padding: 2.5rem 2rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  width: 100%;
+  max-width: 430px;
+}
+
+/* Título */
+.login-title {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1.1;
+}
+
+/* Formulário */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Inputs */
+.login-inputs-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.side-bar-menu{
+  border-right: solid 2px #ffffff26;
+  background-color: rgba(0, 0, 0, 0.349);
+  display: flex;
+  height: 100%;
+  width: 4rem;
+  padding-top:  1rem;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  .side-bar-menu-item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 7px;
+    padding: 0.6rem;
+    color:#f0f0f0;
+    font-size: 1.3rem;    
+    margin: 0.5rem 0.2rem 0.2rem 0.2rem;
+  }
+  .side-bar-menu-item:hover{
+    background-color: rgba(0, 0, 0, 0.400);
   }
 }

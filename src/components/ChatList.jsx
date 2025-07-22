@@ -1,60 +1,48 @@
 import React, { use } from "react";
 import ChatItem from "./ChatItem";
-import axios from "axios";
+import axios, { all } from "axios";
 import { useEffect, useState } from "react";
-const ChatList = ({ onOpenChat }) => {
-  const [groupedArray, setGroupedArray] = useState([]);
-  const [messages, setMessages] = useState([]);
-  const [profile, setProfile] = useState([]);
 
-  const handleSelectChat = (profile, messages) => {
-    setMessages(() => [messages]);
-    setProfile(() => [profile]);
-    onOpenChat(profile, messages);
+const ChatList = ({ groupedArray, contacts, onOpenChat }) => {
+  const handleSelectChat = (profile) => {
+    const selectedIdentifier = profile.number ? profile.number : profile.handle;
+    console.log("Select chat ativo chatlist " + selectedIdentifier);
+    /*console.log(
+      "Select chat ativo chatlist " +
+        JSON.stringify(messages) +
+        " " +
+        JSON.stringify(profile)
+    );*/
+    onOpenChat(selectedIdentifier);
   };
-
-  useEffect(() => {
-    const fetchMessages = async () => {
-      const url = "http://localhost:3000/messagesDB";
-      let msgs = await axios.get(url);
-      msgs = msgs.data;
-      let messages = [];
-
-      for (let i = 0; i < msgs.received.length; i++) {
-        messages.push(msgs.received[i].entry[0].changes[0].value);
-      }
-      for (let i = 0; i < msgs.sent.length; i++) {
-        messages.push(msgs.sent[i]);
-      }
-
-      const groupedMessages = messages.reduce((acc, msg) => {
-        let number;
-        if (msg.messages) {
-          number = msg.messages[0].from;
-        } else {
-          number = msg.to;
-        }
-        if (!acc[number]) {
-          acc[number] = [];
-        }
-        acc[number].push(msg);
-        return acc;
-      }, {});
-
-      const groupedArray = Object.values(groupedMessages);
-      setGroupedArray(groupedArray);
-      //console.log(groupedArray);
-    };
-    fetchMessages();
-  }, []);
   return (
     <>
       {groupedArray.map((group, index) => {
         //console.log("group: " + JSON.stringify(group));
         const lastMessage = group[group.length - 1];
+
         return (
           <ChatItem
             key={index}
+            contact={
+              contacts.find((p) => {
+                if (group[0].contact_id === p.id) {
+                  //console.log("found contact: ", p);
+                  return p;
+                }
+              }) || {
+                name: "",
+                number:
+                  group[0].mode === "received"
+                    ? group[0].sender
+                    : group[0].recipient,
+                handle:
+                  group[0].mode === "received"
+                    ? group[0].sender
+                    : group[0].recipient,
+                source: group[0].source,
+              }
+            }
             messages={group}
             onSelectChat={handleSelectChat}
           />
