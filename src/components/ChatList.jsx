@@ -20,7 +20,6 @@ const ChatList = ({ groupedArray, contacts, onOpenChat }) => {
       {groupedArray.map((group, index) => {
         //console.log("group: " + JSON.stringify(group));
         const lastMessage = group[group.length - 1];
-
         return (
           <ChatItem
             key={index}

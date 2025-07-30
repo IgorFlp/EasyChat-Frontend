@@ -41,21 +41,19 @@ export default function OpenChat({ messages, profile, selectedIdentifier }) {
   console.log("OpenChat messages: ", messages);
   //console.log("OpenChat profile: ", profile);
   return (
-    
-      <>
-        {isReady ? (
-          <div className="chat_page_chat-window">
-            <ChatHeader
-              profile={profile}
-              selectedIdentifier={selectedIdentifier}
-            />
-            <ChatMessagesContainer messages={messages} />
-            <ChatFooter onSendMessage={handleSendMessage} profile={profile} />
-          </div>
-        ) : (
-          <div>Selecione um chat</div>
-        )}
-      </>
-    
+    <>
+      {isReady ? (
+        <div className="chat_page_chat-window">
+          <ChatHeader
+            profile={profile}
+            selectedIdentifier={selectedIdentifier}
+          />
+          <ChatMessagesContainer messages={messages} />
+          <ChatFooter onSendMessage={handleSendMessage} profile={profile} />
+        </div>
+      ) : (
+        <div>Selecione um chat</div>
+      )}
+    </>
   );
 }
