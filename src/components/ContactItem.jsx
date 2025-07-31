@@ -1,7 +1,8 @@
 import React from "react";
-
-const ContactItem = ({ contact }) => {
-  console.log("Entrou no contact item: " + contact.name);
+import { useState } from "react";
+import ContactEdit from "./ContactEdit";
+const ContactItem = ({ contact, onOpen, onChat }) => {
+  //console.log("Entrou no contact item: " + contact.name);
   return (
     <div className="contact-list-item">
       <img src="src\assets\chat-img.svg" alt="" className="chat_item_img" />
@@ -11,10 +12,16 @@ const ContactItem = ({ contact }) => {
         </label>
       </div>
 
-      <label className="edit-contact contact-list-item-icons">
-        <i class="bi bi-pencil-square"></i>
+      <label
+        className="edit-contact contact-list-item-icons"
+        onClick={() => onOpen(contact)}
+      >
+        <i className="bi bi-pencil-square"></i>
       </label>
-      <label className="start-chat contact-list-item-icons">
+      <label
+        className="start-chat contact-list-item-icons"
+        onClick={() => onChat(contact)}
+      >
         <i class="bi bi-chat-left-dots"></i>
       </label>
     </div>

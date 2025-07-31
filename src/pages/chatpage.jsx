@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { API_URL, SOCKET_URL } from "../config.js";
 import SideBar from "../components/SideBar.jsx";
 import ContatcsMenu from "../components/ContatcsMenu.jsx";
+import ContactEdit from "../components/ContactEdit.jsx";
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
@@ -15,15 +16,34 @@ const ChatPage = () => {
   const [groupedArray, setGroupedArray] = useState([]);
   const [selectedIdentifier, setSelectedIdentifier] = useState(null);
   const [currentMessages, setCurrentMessages] = useState([]);
-  const [currentContact, setCurrentContact] = useState({});
+  const [currentContact, setCurrentContact] = useState(null);
   const [databases, setDatabases] = useState([]);
   const [selectedDatabase, setSelectedDatabase] = useState(null);
+  const [isEditingContact, setIsEditingContact] = useState(false);
+  const [selectedContact, setSelectedContact] = useState(null);
 
   const showContactMenu = (contacts) => {
-    document
-      .querySelector(".contacts-menu-container")
-      .setAttribute("style", "visibility: block");
+    document.querySelector(".contacts-menu-container").classList.remove("hide");
   };
+  function openEditor(contact) {
+    document
+      .querySelector(".contact-editor-container")
+      .classList.remove("hide");
+    console.log("open editor contact: " + contact.name);
+    setSelectedContact(contact);
+    setIsEditingContact(true);
+  }
+
+  const closeEditor = () => {
+    document.querySelector(".contact-editor-container").classList.add("hide");
+    setIsEditingContact(false);
+  };
+  function openNewChat(contact) {
+    let identifier = contact.number ? contact.number : contact.handle;
+    setCurrentContact(contact);
+    setCurrentMessages([]);
+    setSelectedIdentifier(identifier);
+  }
   const groupMessages = (msgs) => {
     let grouped = msgs.reduce((acc, msg, index) => {
       let number;
@@ -139,9 +159,15 @@ const ChatPage = () => {
     console.log("Selected Identifier: ", selectedIdentifier);
     console.log("Current Messages: ", cM);
   };
+
   return (
     <>
-      <ContatcsMenu contacts={contacts} />
+      <ContactEdit contact={selectedContact} onCloseEditor={closeEditor} />
+      <ContatcsMenu
+        contacts={contacts}
+        onOpenNewChat={openNewChat}
+        onOpenEditor={openEditor}
+      />
       <div className="chat_page_container">
         <SideBar onShowContactMenu={showContactMenu} />
         <div className="chat_page_chat-list">
@@ -154,7 +180,7 @@ const ChatPage = () => {
         </div>
 
         <div className="chat_page_chat-window-container">
-          {messages.length > 0 ? (
+          {messages.length > 0 || currentContact ? (
             <OpenChat
               profile={currentContact}
               messages={currentMessages}

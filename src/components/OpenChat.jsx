@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 export default function OpenChat({ messages, profile, selectedIdentifier }) {
   //const [messages, setMessages] = useState([]);
   //const [profile, setProfile] = useState({});
+  console.log("Profile openchat: " + JSON.stringify(profile));
   const [isReady, setIsReady] = useState(false);
   useEffect(() => {
     if ((messages && messages.length > 0) || profile) {
