@@ -7,7 +7,7 @@ function closeContactsMenu() {
 }
 
 const ContatcsMenu = ({ contacts, onOpenEditor, onOpenNewChat }) => {
-  console.log("contacs: " + contacts);
+  //console.log("contacs: " + contacts);
   return (
     <div className="contacts-menu-container hide">
       <div className="contacts-menu">
@@ -21,7 +21,7 @@ const ContatcsMenu = ({ contacts, onOpenEditor, onOpenNewChat }) => {
         </div>
         <div className="contacts-list">
           {contacts.map((c, index) => {
-            console.log("map: " + c.name);
+            //console.log("map: " + c.name);
             return (
               <ContactItem
                 key={index}

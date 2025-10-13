@@ -3,23 +3,23 @@ import SentMessage from "./SentMessage";
 import ReceivedMessage from "./ReceivedMessage";
 import ChatHeader from "./ChatHeader";
 import ChatFooter from "./ChatFooter";
+import { API_URL } from "../config.js";
 import ChatMessagesContainer from "./ChatMessagesContainer";
 import { useState, useEffect } from "react";
 
-export default function OpenChat({ messages, profile, selectedIdentifier }) {
-  //const [messages, setMessages] = useState([]);
-  //const [profile, setProfile] = useState({});
-  console.log("Profile openchat: " + JSON.stringify(profile));
+export default function OpenChat({ messages, contact, selectedIdentifier }) {
   const [isReady, setIsReady] = useState(false);
   useEffect(() => {
-    if ((messages && messages.length > 0) || profile) {
+    if ((messages && messages.length > 0) || contact) {
       setIsReady(true);
     }
-  }, [messages, profile]);
+  }, [messages, contact]);
   const postMessage = async (message) => {
     try {
-      const response = await fetch("http://localhost:3000/message", {
+      const response = await fetch(`${API_URL}/messageTelegram`, {
         method: "POST",
+        withCredentials: true,
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -27,8 +27,8 @@ export default function OpenChat({ messages, profile, selectedIdentifier }) {
       });
 
       const data = await response.json();
-      //console.log("Message posted successfully:", data);
-      return data; // agora sim retorna o JSON
+
+      return data;
     } catch (error) {
       console.error("Error posting message:", error);
       return null;
@@ -36,21 +36,18 @@ export default function OpenChat({ messages, profile, selectedIdentifier }) {
   };
   const handleSendMessage = async (newMessage) => {
     let msg = await postMessage(newMessage);
-    //console.log("Message sent: ", msg);
-    //setMessages((prevMessages) => [...prevMessages, msg]);
   };
-  console.log("OpenChat messages: ", messages);
-  //console.log("OpenChat profile: ", profile);
+
   return (
     <>
       {isReady ? (
         <div className="chat_page_chat-window">
           <ChatHeader
-            profile={profile}
+            contact={contact}
             selectedIdentifier={selectedIdentifier}
           />
           <ChatMessagesContainer messages={messages} />
-          <ChatFooter onSendMessage={handleSendMessage} profile={profile} />
+          <ChatFooter onSendMessage={handleSendMessage} contact={contact} />
         </div>
       ) : (
         <div>Selecione um chat</div>

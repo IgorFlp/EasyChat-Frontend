@@ -22,7 +22,7 @@ const ContactItem = ({ contact, onOpen, onChat }) => {
         className="start-chat contact-list-item-icons"
         onClick={() => onChat(contact)}
       >
-        <i class="bi bi-chat-left-dots"></i>
+        <i className="bi bi-chat-left-dots"></i>
       </label>
     </div>
   );

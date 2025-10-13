@@ -12,7 +12,7 @@ import ContactEdit from "../components/ContactEdit.jsx";
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [contacts, setContacts] = useState([]);
-  const [profile, setProfile] = useState({});
+
   const [groupedArray, setGroupedArray] = useState([]);
   const [selectedIdentifier, setSelectedIdentifier] = useState(null);
   const [currentMessages, setCurrentMessages] = useState([]);
@@ -29,7 +29,7 @@ const ChatPage = () => {
     document
       .querySelector(".contact-editor-container")
       .classList.remove("hide");
-    console.log("open editor contact: " + contact.name);
+
     setSelectedContact(contact);
     setIsEditingContact(true);
   }
@@ -39,23 +39,19 @@ const ChatPage = () => {
     setIsEditingContact(false);
   };
   function openNewChat(contact) {
-    let identifier = contact.number ? contact.number : contact.handle;
+    let identifier = contact.common_id;
     setCurrentContact(contact);
     setCurrentMessages([]);
     setSelectedIdentifier(identifier);
   }
   const groupMessages = (msgs) => {
     let grouped = msgs.reduce((acc, msg, index) => {
-      let number;
-      if (msg.mode === "sent") {
-        number = msg.recipient;
-      } else {
-        number = msg.sender;
+      let common_id = msg.common_id;
+
+      if (!acc[common_id]) {
+        acc[common_id] = [];
       }
-      if (!acc[number]) {
-        acc[number] = [];
-      }
-      acc[number].push(msg);
+      acc[common_id].push(msg);
       return acc;
     }, []);
     return grouped;
@@ -70,21 +66,18 @@ const ChatPage = () => {
           "Content-Type": "application/json",
         },
       });
-      console.log("Dbs: " + JSON.stringify(dbs.data));
+
       dbs = dbs.data;
       setDatabases(dbs);
       setSelectedDatabase(dbs[0]);
-      //console.log("ID: " + selectedDatabase.database_id);
     };
     fetchDatabases();
   }, []);
   useEffect(() => {
     if (!selectedDatabase) return;
-    console.log("ID: " + JSON.stringify(selectedDatabase));
+
     const handleNewMessage = (msg) => {
-      console.log("Recebida:", msg);
       setMessages((prev) => [...prev, msg]);
-      //console.log("Mensagens atualizadas:", messages);
     };
     socket.on("new_message", handleNewMessage);
 
@@ -110,11 +103,9 @@ const ChatPage = () => {
           },
         });
         if (!ctts.data || ctts.data.length === 0 || ctts.status == 204) {
-          console.log("Nenhum contato encontrado.");
           contacts = [];
         } else {
           contacts = ctts.data;
-          console.log("Contatos encontrados: ", contacts);
         }
       } catch (error) {
         console.log("Erro: ", error);
@@ -130,34 +121,55 @@ const ChatPage = () => {
     };
   }, [selectedDatabase]);
   useEffect(() => {
-    // console.log("Messages: " + messages);
     if (messages.length > 0) {
-      const groupedArray = Object.values(groupMessages(messages));
-      console.log("Grouped Array: ", groupedArray);
-      setGroupedArray(groupedArray);
+      const gA = Object.values(groupMessages(messages));
+
+      setGroupedArray(gA);
+      if (selectedIdentifier) {
+        const cM = gA.filter((group) => {
+          const gp = group.filter(
+            (msg) => msg.common_id === selectedIdentifier
+          );
+          if (gp.length > 0) {
+            return gp;
+          }
+        });
+        setCurrentMessages(...cM);
+      }
     }
   }, [messages]);
 
   const handleSelectChat = (selectedIdentifier) => {
     const cM = groupedArray.filter((group) => {
-      const gp = group.filter(
-        (msg) =>
-          msg.recipient === selectedIdentifier ||
-          msg.sender === selectedIdentifier
-      );
+      const gp = group.filter((msg) => msg.common_id === selectedIdentifier);
       if (gp.length > 0) {
         return gp;
       }
     });
 
-    const cC = contacts.find(
-      (p) => p.number === selectedIdentifier || p.handle === selectedIdentifier
-    );
+    let cC = contacts.find((p) => {
+      switch (p.source) {
+        case "Whatsapp":
+          return p.whatsapp_id === selectedIdentifier;
+        case "Instagram":
+          return p.instagram_id === selectedIdentifier;
+        case "Telegram":
+          return p.telegram_id === selectedIdentifier;
+        default:
+          return null;
+      }
+    });
+    if (!cC) {
+      cC = {
+        name: "",
+        common_id: selectedIdentifier,
+        source: cM[0][0].source,
+      };
+    }
+
     setCurrentContact(cC);
     setCurrentMessages(...cM);
     setSelectedIdentifier(selectedIdentifier);
-    console.log("Selected Identifier: ", selectedIdentifier);
-    console.log("Current Messages: ", cM);
   };
 
   return (
@@ -180,14 +192,14 @@ const ChatPage = () => {
         </div>
 
         <div className="chat_page_chat-window-container">
-          {messages.length > 0 || currentContact ? (
+          {!selectedIdentifier && !currentContact ? (
+            <div className="empty-chat">Selecione um contato</div>
+          ) : (
             <OpenChat
-              profile={currentContact}
+              contact={currentContact}
               messages={currentMessages}
               selectedIdentifier={selectedIdentifier}
             />
-          ) : (
-            console.log("não tem mensagens!")
           )}
         </div>
       </div>
