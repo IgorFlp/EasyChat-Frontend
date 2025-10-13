@@ -2,11 +2,9 @@ import React from "react";
 import SentMessage from "./SentMessage";
 import { useState } from "react";
 
-export default function ChatFooter({ onSendMessage, profile }) {
-  //console.log("ChatFooter profile: ", profile);
-
+export default function ChatFooter({ onSendMessage, contact }) {
   const [input, setInput] = useState("");
-  //console.log("profile: ", profile);
+
   const sendMessage = () => {
     if (input.trim() === "") return;
 
@@ -16,13 +14,23 @@ export default function ChatFooter({ onSendMessage, profile }) {
     const minutes = date.getMinutes();
     const timestamp = `${hour}:${minutes}`;
 
-    onSendMessage({
-      messaging_product: profile.source,
-      to: profile.source === "whatsapp" ? profile.number : profile.handle,
-      type: "text",
-      text: { preview_url: true, body: input },
-    });
-    setInput(""); // limpa input
+    if (contact.source === "telegram") {
+      onSendMessage({
+        messaging_product: contact.source,
+        to: contact.common_id,
+        type: "text",
+        text: input,
+      });
+    }
+    if (contact.source === "whatsapp") {
+      onSendMessage({
+        messaging_product: contact.source,
+        to: contact.common_id,
+        type: "text",
+        text: { preview_url: true, body: input },
+      });
+    }
+    setInput("");
   };
 
   return (
