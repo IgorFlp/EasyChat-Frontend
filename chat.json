@@ -1,0 +1,60 @@
+{
+  "id": "cmiessyzp006uqw4o4nnopgws",
+  "remoteJid": "5518996545180@s.whatsapp.net",
+  "pushName": "Ga Morro",
+  "profilePicUrl": "https://pps.whatsapp.net/v/t61.24694-24/454173300_1177821853448927_4123205434249679066_n.jpg?ccb=11-4&oh=01_Q5Aa3AEbp4R-yt81NzTfOq0fKSVDZnGVO4XBK2fFI7huqIGkmQ&oe=69358CB9&_nc_sid=5e03e0&_nc_cat=109",
+  "updatedAt": "2025-11-27T14:28:30.000Z",
+  "windowStart": "2025-11-25T16:36:52.280Z",
+  "windowExpires": "2025-11-26T16:36:52.280Z",
+  "windowActive": false,
+  "lastMessage": {
+    "id": "cmihj3vmb006ho24i7omo40vv",
+    "key": {
+      "id": "AC438BAE65AF8CF2673DA64D43DFE1B1",
+      "fromMe": false,
+      "remoteJid": "5518996545180@s.whatsapp.net",
+      "participant": "",
+      "remoteJidAlt": "106983474651375@lid",
+      "addressingMode": "pn"
+    },
+    "pushName": "Ga Morro",
+    "participant": null,
+    "messageType": "imageMessage",
+    "message": {
+      "imageMessage": { "caption": "Liliam - 12/11 folga TRE" },
+      "messageContextInfo": {
+        "messageSecret": "i0JAyECCgjnIJbE5cQUfGtmU1YNL6rXM7eQC90uJnu8=",
+        "deviceListMetadata": {
+          "senderKeyHash": "o+sf6q9R7PJOxQ==",
+          "senderTimestamp": { "low": 1764249164, "high": 0, "unsigned": true },
+          "recipientKeyHash": "OgVQnB2PWhWxOg==",
+          "senderKeyIndexes": [],
+          "recipientTimestamp": {
+            "low": 1764088591,
+            "high": 0,
+            "unsigned": true
+          },
+          "recipientKeyIndexes": []
+        },
+        "deviceListMetadataVersion": 2
+      }
+    },
+    "contextInfo": {
+      "mentionedJid": [],
+      "groupMentions": [],
+      "pairedMediaType": 0,
+      "statusSourceType": 0
+    },
+    "source": "android",
+    "messageTimestamp": 1764253710,
+    "instanceId": "56950999-307e-4153-8176-90270750ef5e",
+    "sessionId": null,
+    "status": "DELIVERY_ACK"
+  },
+  "unreadCount": 2,
+  "isSaved": true
+}
+
+{"status enviado dbcheck": "SERVER_ACK", 
+"status recebido": "DELIVERY_ACK",
+"status lido": "READ_ACK"}

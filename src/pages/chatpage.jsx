@@ -21,6 +21,7 @@ const ChatPage = () => {
   const [selectedDatabase, setSelectedDatabase] = useState(null);
   const [isEditingContact, setIsEditingContact] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
+  const [chats, setChats] = useState([]);
 
   const showContactMenu = (contacts) => {
     document.querySelector(".contacts-menu-container").classList.remove("hide");
@@ -92,6 +93,24 @@ const ChatPage = () => {
       msgs = msgs.data;
       setMessages(msgs);
     };
+    const fetchChats = async () => {
+      let instance = "Damaq - Igor";
+      const url = `${API_URL}/chat/findChats?instance=${instance}`;
+      let chats = await axios.post(
+        url,
+        {},
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      chats = chats.data;
+      console.log("chats: " + JSON.stringify(chats[1]));
+      setChats(chats);
+      //setMessages(msgs);
+    };
     const fetchContacts = async () => {
       let contacts = [];
       try {
@@ -114,8 +133,9 @@ const ChatPage = () => {
 
       setContacts(contacts);
     };
-    fetchContacts();
-    fetchMessages();
+    fetchChats();
+    //fetchContacts();
+    //fetchMessages();
     return () => {
       socket.off("new_message", handleNewMessage);
     };
@@ -187,6 +207,7 @@ const ChatPage = () => {
             groupedArray={groupedArray}
             contacts={contacts}
             messages={messages}
+            chats={chats}
             onOpenChat={handleSelectChat}
           />
         </div>
