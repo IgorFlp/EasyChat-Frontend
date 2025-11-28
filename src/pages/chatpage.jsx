@@ -107,20 +107,25 @@ const ChatPage = () => {
         }
       );
       chats = chats.data;
-      console.log("chats: " + JSON.stringify(chats[1]));
+      //console.log("chats: " + JSON.stringify(chats[1]));
       setChats(chats);
       //setMessages(msgs);
     };
     const fetchContacts = async () => {
       let contacts = [];
+      let instance = "Damaq - Igor";
       try {
-        const url = `${API_URL}/contacts?database=${selectedDatabase.database_id}`;
-        let ctts = await axios.get(url, {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const url = `${API_URL}/chat/findContacts?instance=${instance}`;
+        let ctts = await axios.post(
+          url,
+          {},
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (!ctts.data || ctts.data.length === 0 || ctts.status == 204) {
           contacts = [];
         } else {
@@ -130,11 +135,11 @@ const ChatPage = () => {
         console.log("Erro: ", error);
         return;
       }
-
+      //console.log("contacts: " + JSON.stringify(contacts));
       setContacts(contacts);
     };
     fetchChats();
-    //fetchContacts();
+    fetchContacts();
     //fetchMessages();
     return () => {
       socket.off("new_message", handleNewMessage);
@@ -191,22 +196,21 @@ const ChatPage = () => {
     setCurrentMessages(...cM);
     setSelectedIdentifier(selectedIdentifier);
   };
-
-  return (
-    <>
-      <ContactEdit contact={selectedContact} onCloseEditor={closeEditor} />
+  /*<ContactEdit contact={selectedContact} onCloseEditor={closeEditor} />
       <ContatcsMenu
         contacts={contacts}
         onOpenNewChat={openNewChat}
         onOpenEditor={openEditor}
-      />
+
+        devolver ali VV 
+      />*/
+  return (
+    <>
       <div className="chat_page_container">
         <SideBar onShowContactMenu={showContactMenu} />
         <div className="chat_page_chat-list">
           <ChatList
-            groupedArray={groupedArray}
             contacts={contacts}
-            messages={messages}
             chats={chats}
             onOpenChat={handleSelectChat}
           />

@@ -3,7 +3,7 @@ import ChatItem from "./ChatItem";
 import axios, { all } from "axios";
 import { useEffect, useState } from "react";
 
-const ChatList = ({ groupedArray, contacts, chats, onOpenChat }) => {
+const ChatList = ({ contacts, chats, onOpenChat }) => {
   const handleSelectChat = (common_id) => {
     const selectedIdentifier = common_id;
     onOpenChat(selectedIdentifier);
@@ -12,7 +12,12 @@ const ChatList = ({ groupedArray, contacts, chats, onOpenChat }) => {
     <>
       {chats.map((chat, index) => {
         return (
-          <ChatItem key={index} chat={chat} onSelectChat={handleSelectChat} />
+          <ChatItem
+            key={index}
+            contacts={contacts}
+            chat={chat}
+            onSelectChat={handleSelectChat}
+          />
         );
       })}
     </>

@@ -5,7 +5,8 @@ import { faHeadphones } from "@fortawesome/free-solid-svg-icons";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { faCheckDouble } from "@fortawesome/free-solid-svg-icons";
 
-const ChatItem = ({ messages, contact, chat, onSelectChat }) => {
+const ChatItem = ({ contacts, chat, onSelectChat }) => {
+  let contact = [];
   const selectChat = (chat) => {
     //console.log("ChatItem selectChat: " + JSON.stringify(messages));
     onSelectChat(chat);
@@ -16,6 +17,23 @@ const ChatItem = ({ messages, contact, chat, onSelectChat }) => {
         return <FontAwesomeIcon icon={faCheckDouble} />;
       case "DELIVERY_ACK":
         return null;
+    }
+  };
+  const IsContact = async (chat) => {
+    contact = [];
+    //console.log("chat remoteJid: " + contacts[2].remoteJid);
+    const ctt = contacts.filter((c) => c.remoteJid === chat.remoteJid);
+    //console.log("contact chat item: " + JSON.stringify(ctt));
+    if (ctt.length > 0) {
+      contact = ctt[0];
+    } else {
+      contact = false;
+      console.log(
+        "Contact false: " +
+          JSON.stringify(contact) +
+          "   chat: " +
+          JSON.stringify(chat)
+      );
     }
   };
   const messageLine = (chat) => {
@@ -51,11 +69,13 @@ const ChatItem = ({ messages, contact, chat, onSelectChat }) => {
     }
   };
   const statusI = statusIcon(chat.lastMessage.status);
-
+  IsContact(chat);
+  //console.log("contact chat item: " + JSON.stringify(contact));
   let date = new Date();
   date.setTime(chat.lastMessage.messageTimestamp * 1000);
   let hour = date.getHours().toString().padStart(2, "0");
   let minutes = date.getMinutes().toString().padStart(2, "0");
+
   return (
     <>
       <div
@@ -65,12 +85,21 @@ const ChatItem = ({ messages, contact, chat, onSelectChat }) => {
           selectChat(chat);
         }}
       >
-        <img src={chat.profilePicUrl} alt="" className="chat_item_img" />
-        <div className="chat_item_texts">
-          <label className="chat_item_texts-name">
-            {chat.pushName != "" ? chat.pushName : chat.remoteJid}
-          </label>
-          <div className="chat_item_texts_preview">
+        <img src={chat.profilePicUrl} alt="" className="chat-item-img" />
+        <div className="chat-item-texts">
+          <div className="chat-item-row1">
+            <label className="chat-item-row1-name primary-text">
+              {contact.pushName
+                ? contact.pushName
+                : chat.pushName
+                ? chat.pushName
+                : chat.remoteJid.replace("@s.whatsapp.net", "")}
+            </label>
+            <label className="chat-item-row1-time secondary-text">
+              {hour + ":" + minutes}
+            </label>
+          </div>
+          <div className="chat-item-row2 secondary-text">
             {statusI != null ? (
               <label className="chat_item_texts_preview-status">
                 {statusI}
@@ -78,12 +107,8 @@ const ChatItem = ({ messages, contact, chat, onSelectChat }) => {
             ) : (
               <></>
             )}
-
             <label className="chat_item_texts_preview-message">
               {messageLine(chat)}
-            </label>
-            <label className="chat_item_texts_preview-time">
-              {hour + ":" + minutes}
             </label>
           </div>
         </div>
