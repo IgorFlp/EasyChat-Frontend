@@ -5,10 +5,18 @@ const ContactItem = ({ contact, onOpen, onChat }) => {
   //console.log("Entrou no contact item: " + contact.name);
   return (
     <div className="contact-list-item">
-      <img src="src\assets\chat-img.svg" alt="" className="chat_item_img" />
-      <div className="chat_item_texts">
-        <label className="chat_item_texts-name">
-          {contact.name ? contact.name : title}
+      <img
+        src={
+          contact.profilePicUrl
+            ? contact.profilePicUrl
+            : "src/assets/chat-img.svg"
+        }
+        alt="Falha no carregamento"
+        className="chat-item-img"
+      />
+      <div className="chat-item-texts">
+        <label className="primary-text">
+          {contact.pushName ? contact.pushName : contact.remoteJid}
         </label>
       </div>
 

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { API_URL, SOCKET_URL } from "../config.js";
+import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 
@@ -7,27 +9,29 @@ const ContactEdit = ({ contact, onCloseEditor }) => {
   const [app, setApp] = useState("");
   const [phone, setPhone] = useState("");
   const [handle, setHandle] = useState("");
-  function handleSaveContact() {
-    console.log(name, app, phone, handle);
+  function handleSaveContact(contact) {
+    console.log(JSON.stringify(contact));
+    let url = `${API_URL}/contact/updateContact`;
+    contact.pushName = name;
+    let header = {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    let data = contact;
+    axios.put(url, data, header).then((response) => {
+      console.log("Contato salvo: " + JSON.stringify(response.data));
+    });
   }
   useEffect(() => {
-    console.log("Contact: " + JSON.stringify(contact));
+    //console.log("Contact: " + JSON.stringify(contact));
     if (contact) {
-      setName(contact.name);
-      setApp(contact.source);
-      setPhone(contact.number);
-      setHandle(contact.handle);
+      setName(contact.pushName);
+      setPhone(contact.remoteJid);
     }
   }, [contact]);
-  useEffect(() => {
-    if (app == "Whatsapp" || app == "Telegram") {
-      document.querySelector(".phone-input").disabled = false;
-      document.querySelector(".handle-input").disabled = true;
-    } else {
-      document.querySelector(".phone-input").disabled = true;
-      document.querySelector(".handle-input").disabled = false;
-    }
-  }, [app]);
+
   return (
     <div className="contact-editor-container hide">
       <div className="contact-editor">
@@ -50,22 +54,6 @@ const ContactEdit = ({ contact, onCloseEditor }) => {
           </div>
 
           <div className="contact-editor-fields-groups">
-            <label>App</label>
-            <select
-              className="app-select form-control"
-              value={app}
-              onChange={(e) => {
-                setApp(e.target.value);
-              }}
-            >
-              <option>Whatsapp</option>
-              <option>Instagram</option>
-              <option>Telegram</option>
-              <option>Facebook</option>
-            </select>
-          </div>
-
-          <div className="contact-editor-fields-groups">
             <label>Telefone</label>
             <input
               className="phone-input form-control"
@@ -74,17 +62,9 @@ const ContactEdit = ({ contact, onCloseEditor }) => {
             ></input>
           </div>
 
-          <div className="contact-editor-fields-groups">
-            <label>Nome de usuario</label>
-            <input
-              className="handle-input form-control"
-              value={handle}
-              onChange={(e) => setHandle(e.target.value)}
-            ></input>
-          </div>
           <button
             className="contact-save btn btn-success"
-            onClick={handleSaveContact}
+            onClick={() => handleSaveContact(contact)}
           >
             Salvar
           </button>
