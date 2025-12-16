@@ -15,12 +15,11 @@ const ChatPage = () => {
 
   const [groupedArray, setGroupedArray] = useState([]);
   const [selectedIdentifier, setSelectedIdentifier] = useState(null);
-  const [currentMessages, setCurrentMessages] = useState([]);
-  const [currentContact, setCurrentContact] = useState(null);
   const [databases, setDatabases] = useState([]);
   const [selectedDatabase, setSelectedDatabase] = useState(null);
   const [isEditingContact, setIsEditingContact] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
+  const [selectedChat, setSelectedChat] = useState(null);
   const [chats, setChats] = useState([]);
 
   const showContactMenu = (contacts) => {
@@ -164,49 +163,23 @@ const ChatPage = () => {
     }
   }, [messages]);
 
-  const handleSelectChat = (selectedIdentifier) => {
-    const cM = groupedArray.filter((group) => {
-      const gp = group.filter((msg) => msg.common_id === selectedIdentifier);
-      if (gp.length > 0) {
-        return gp;
-      }
-    });
-
-    let cC = contacts.find((p) => {
-      switch (p.source) {
-        case "Whatsapp":
-          return p.whatsapp_id === selectedIdentifier;
-        case "Instagram":
-          return p.instagram_id === selectedIdentifier;
-        case "Telegram":
-          return p.telegram_id === selectedIdentifier;
-        default:
-          return null;
-      }
-    });
-    if (!cC) {
-      cC = {
-        name: "",
-        common_id: selectedIdentifier,
-        source: cM[0][0].source,
-      };
+  const handleSelectChat = (chat) => {
+    const ctt = contacts.filter((c) => c.remoteJid === chat.remoteJid);
+    if (ctt.length > 0) {
+      setSelectedContact(ctt[0]);
     }
-
-    setCurrentContact(cC);
-    setCurrentMessages(...cM);
-    setSelectedIdentifier(selectedIdentifier);
+    setSelectedChat(chat);
   };
-  /*<ContactEdit contact={selectedContact} onCloseEditor={closeEditor} />
-      <ContatcsMenu
-        contacts={contacts}
-        onOpenNewChat={openNewChat}
-        onOpenEditor={openEditor}
 
-        devolver ali VV 
-      />*/
   return (
     <>
       <div className="chat_page_container">
+        <ContactEdit contact={selectedContact} onCloseEditor={closeEditor} />
+        <ContatcsMenu
+          contacts={contacts}
+          onOpenNewChat={openNewChat}
+          onOpenEditor={openEditor}
+        />
         <SideBar onShowContactMenu={showContactMenu} />
         <div className="chat_page_chat-list">
           <ChatList
@@ -215,16 +188,11 @@ const ChatPage = () => {
             onOpenChat={handleSelectChat}
           />
         </div>
-
         <div className="chat_page_chat-window-container">
-          {!selectedIdentifier && !currentContact ? (
+          {!selectedChat ? (
             <div className="empty-chat">Selecione um contato</div>
           ) : (
-            <OpenChat
-              contact={currentContact}
-              messages={currentMessages}
-              selectedIdentifier={selectedIdentifier}
-            />
+            <OpenChat chat={selectedChat} contact={selectedContact} />
           )}
         </div>
       </div>

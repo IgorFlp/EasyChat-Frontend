@@ -4,9 +4,8 @@ import axios, { all } from "axios";
 import { useEffect, useState } from "react";
 
 const ChatList = ({ contacts, chats, onOpenChat }) => {
-  const handleSelectChat = (common_id) => {
-    const selectedIdentifier = common_id;
-    onOpenChat(selectedIdentifier);
+  const handleSelectChat = (chat) => {
+    onOpenChat(chat);
   };
   return (
     <>
@@ -16,7 +15,9 @@ const ChatList = ({ contacts, chats, onOpenChat }) => {
             key={index}
             contacts={contacts}
             chat={chat}
-            onSelectChat={handleSelectChat}
+            onSelectChat={() => {
+              handleSelectChat(chat);
+            }}
           />
         );
       })}

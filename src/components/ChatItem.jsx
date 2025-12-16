@@ -28,12 +28,6 @@ const ChatItem = ({ contacts, chat, onSelectChat }) => {
       contact = ctt[0];
     } else {
       contact = false;
-      console.log(
-        "Contact false: " +
-          JSON.stringify(contact) +
-          "   chat: " +
-          JSON.stringify(chat)
-      );
     }
   };
   const messageLine = (chat) => {

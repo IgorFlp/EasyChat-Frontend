@@ -35,6 +35,9 @@ body {
   width: 25%;
   height: 100%;
   border-right: solid 3px #0000003f;
+  overflow-y: scroll;
+  scrollbar-color: rgba(0, 0, 0, 0.507) rgba(255, 255, 255, 0);
+  scrollbar-width: thin;
 }
 .chat_page_chat-window-container {
   width: 75%;
@@ -143,8 +146,9 @@ body {
     width: 100%;
     .open_chat_body_received-message {
       position: relative; /* necessário para o posicionamento absoluto interno */
-      display: inline-block;
-      padding: 10px 20px 20px 10px;
+      display: flex;
+      flex-direction: column;
+      /*padding: 10px 20px 20px 10px;*/
       justify-self: flex-start;
       margin: 0px 5px 5px 5px;
       width: fit-content;
@@ -158,17 +162,22 @@ body {
       color: #f0f0f0;
       padding-right: 0.5rem;
     }
+    .open_chat_body_received-message-text {
+      width: 100%;
+      margin: 10px 5px 5px 10px;
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
+    }
     .open_chat_body_received-message-time {
-      position: absolute;
-      bottom: 5px;
-      right: 10px;
+      align-self: flex-end;
       font-size: 0.7rem;
       color: #ccc;
     }
     .open_chat_body_sent-message {
       position: relative; /* necessário para o posicionamento absoluto interno */
-      display: inline-block;
-      padding: 10px 20px 10px 10px;
+      display: flex;
+      flex-direction: column;
+      /*padding: 10px 20px 10px 10px;*/
       justify-self: flex-end;
       margin: 5px 5px 5px 5px;
       width: fit-content;
@@ -182,15 +191,15 @@ body {
       color: #f0f0f0;
       padding-right: 0.5rem;
     }
+
     .open_chat_body_sent-message-text {
       width: 100%;
+      margin: 10px 5px 5px 10px;
       overflow-wrap: break-word;
       white-space: pre-wrap;
     }
     .open_chat_body_sent-message-time {
-      position: absolute;
-      bottom: 5px;
-      right: 10px;
+      align-self: flex-end;
       font-size: 0.7rem;
       color: #ccc;
     }
@@ -335,7 +344,12 @@ body {
   background-color: #003366;
   border-radius: 1rem;
   width: 50%;
-  height: 80%;
+  height: 90%;
+}
+.contacts-list {
+  height: 90%;
+  overflow-y: scroll;
+  scrollbar-color: rgba(0, 0, 0, 0.507) rgba(255, 255, 255, 0);
 }
 .contact-list-item {
   display: flex;
