@@ -132,6 +132,7 @@ body {
 }
 .open_chat_body_messages-container {
   display: flex;
+  flex-direction: row-reverse;
   flex: 1;
   overflow-y: auto;
   min-height: 0;

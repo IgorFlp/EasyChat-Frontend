@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import {API_URL} from "../config";
+import { API_URL } from "../config";
 
 const Login = () => {
   const [user, setUser] = useState("");
@@ -12,7 +12,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    console.log(API_URL);
+    //console.log(API_URL);
     try {
       const response = await axios.post(
         API_URL + "/login",
@@ -26,15 +26,13 @@ const Login = () => {
       );
 
       if (response.status === 200) {
-        
-        console.log("Response:", response);
-        console.log("Cookies:", document.cookie);
+        //console.log("Response:", response);
+        //console.log("Cookies:", document.cookie);
 
-        
         navigate("/chats");
       }
     } catch (error) {
-      console.error("Erro no login:", error);
+      //console.error("Erro no login:", error);
       setError(error.response?.data?.message || "Erro ao fazer login");
     }
   };
@@ -71,7 +69,7 @@ const Login = () => {
             <div className="login-buttons">
               <button className="login-button" type="submit">
                 Entrar
-              </button>              
+              </button>
             </div>
           </form>
         </div>

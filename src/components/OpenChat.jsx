@@ -46,8 +46,8 @@ export default function OpenChat({ chat, contact }) {
         },
       };
       let body = message;
-      const response = await axios.post(url, body, init);
-      const data = await response.json();
+      const res = await axios.post(url, body, init).then((res) => res);
+      const data = res.data;
       return data;
     } catch (error) {
       console.error("Error posting message:", error);
@@ -56,9 +56,10 @@ export default function OpenChat({ chat, contact }) {
   };
   const handleSendText = async (newMessage) => {
     newMessage.number = chat.remoteJid;
-    console.log("handleSendMessage: ", newMessage);
     let res = await sendText(newMessage);
-    console.log("Message sent: ", res);
+    if (res) {
+      fetchMessages(chat.remoteJid);
+    }
   };
 
   return (

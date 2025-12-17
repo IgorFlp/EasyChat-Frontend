@@ -3,7 +3,7 @@ import React from "react";
 const Message = ({ message }) => {
   //console.log("SentMessage: ", message);
   let date = new Date();
-  date.setTime(message.messageTimestamp);
+  date.setTime(message.messageTimestamp * 1000);
   let hour = date.getHours().toString().padStart(2, "0");
   let minutes = date.getMinutes().toString().padStart(2, "0");
   let timestamp = hour + ":" + minutes;

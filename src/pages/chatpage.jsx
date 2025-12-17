@@ -77,21 +77,12 @@ const ChatPage = () => {
     if (!selectedDatabase) return;
 
     const handleNewMessage = (msg) => {
-      setMessages((prev) => [...prev, msg]);
+      console.log("New message received: ", msg);
+      fetchChats();
+      OpenChat.fetchMessages(msg.remoteJid);
     };
     socket.on("new_message", handleNewMessage);
 
-    const fetchMessages = async () => {
-      const url = `${API_URL}/messagesDB?database=${selectedDatabase.database_id}`;
-      let msgs = await axios.get(url, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      msgs = msgs.data;
-      setMessages(msgs);
-    };
     const fetchChats = async () => {
       let instance = "Damaq - Igor";
       const url = `${API_URL}/chat/findChats?instance=${instance}`;
