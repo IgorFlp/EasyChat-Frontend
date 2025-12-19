@@ -1,61 +1,82 @@
 import React from "react";
-import SentMessage from "./SentMessage";
-import ReceivedMessage from "./ReceivedMessage";
 import ChatHeader from "./ChatHeader";
 import ChatFooter from "./ChatFooter";
+import axios from "axios";
+import { API_URL } from "../config.js";
 import ChatMessagesContainer from "./ChatMessagesContainer";
 import { useState, useEffect } from "react";
 
-export default function OpenChat({ messages, profile, selectedIdentifier }) {
-  //const [messages, setMessages] = useState([]);
-  //const [profile, setProfile] = useState({});
+export default function OpenChat({ chat, contact }) {
   const [isReady, setIsReady] = useState(false);
+  const [messages, setMessages] = useState([]);
   useEffect(() => {
-    if ((messages && messages.length > 0) || profile) {
+    if (chat) {
       setIsReady(true);
     }
-  }, [messages, profile]);
-  const postMessage = async (message) => {
+    fetchMessages(chat.remoteJid);
+  }, [chat]);
+
+  const fetchMessages = async (remoteJid) => {
     try {
-      const response = await fetch("http://localhost:3000/message", {
-        method: "POST",
+      let instance = localStorage.getItem("selected_instance");
+      let url = `${API_URL}/chat/findMessages?instance=${instance}`;
+      let init = {
+        withCredentials: true,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(message),
-      });
+      };
+      let body = { remoteJid: remoteJid };
+      const res = await axios.post(url, body, init);
+      const data = res.data;
 
-      const data = await response.json();
-      //console.log("Message posted successfully:", data);
-      return data; // agora sim retorna o JSON
+      setMessages(data);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
+
+  const sendText = async (message) => {
+    console.log("Sending message: ", message);
+    try {
+      let instance = localStorage.getItem("selected_instance");
+      let url = `${API_URL}/sendText?instance=${instance}`;
+      let init = {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      let body = message;
+      const res = await axios.post(url, body, init).then((res) => res);
+      const data = res.data;
+      return data;
     } catch (error) {
       console.error("Error posting message:", error);
       return null;
     }
   };
-  const handleSendMessage = async (newMessage) => {
-    let msg = await postMessage(newMessage);
-    //console.log("Message sent: ", msg);
-    //setMessages((prevMessages) => [...prevMessages, msg]);
+  const handleSendText = async (newMessage) => {
+    newMessage.number = chat.remoteJid;
+    let res = await sendText(newMessage);
+    if (res) {
+      fetchMessages(chat.remoteJid);
+    }
   };
-  console.log("OpenChat messages: ", messages);
-  //console.log("OpenChat profile: ", profile);
+
   return (
-    
-      <>
-        {isReady ? (
-          <div className="chat_page_chat-window">
-            <ChatHeader
-              profile={profile}
-              selectedIdentifier={selectedIdentifier}
-            />
-            <ChatMessagesContainer messages={messages} />
-            <ChatFooter onSendMessage={handleSendMessage} profile={profile} />
-          </div>
-        ) : (
-          <div>Selecione um chat</div>
-        )}
-      </>
-    
+    <>
+      {isReady ? (
+        <div className="chat_page_chat-window">
+          <ChatHeader chat={chat} contact={contact} />
+          <ChatMessagesContainer messages={messages} />
+          <ChatFooter onSendText={handleSendText} />
+        </div>
+      ) : (
+        <div>Selecione um chat</div>
+      )}
+    </>
   );
 }
+//
+//

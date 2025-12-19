@@ -1,14 +1,18 @@
 import React from "react";
 
-const ChatHeader = ({ profile, selectedIdentifier }) => {
-  //console.log("ChatHeader profile: ", profile);
-  if (profile || selectedIdentifier) {
+const ChatHeader = ({ chat, contact }) => {
+  //console.log("ChatHeader contact: ", contact);
+  if (chat) {
     //console.log("ChatHeader profile: ", profile.name);
     return (
       <div className="open_chat_header">
-        <img src="src\assets\chat-img.svg" alt="" className="chat_item_img" />
-        <label className="chat_item_texts-name">
-          {profile ? profile.name : selectedIdentifier}
+        <img src={chat.profilePicUrl} alt="" className="chat-item-img" />
+        <label className="chat-item-texts-name">
+          {contact.pushName
+            ? contact.pushName + " (" + chat.remoteJid + ")"
+            : chat.pushName + " (" + chat.remoteJid + ")"
+            ? chat.pushName + " (" + chat.remoteJid + ")"
+            : chat.remoteJid.split("@", [0])}
         </label>
       </div>
     );

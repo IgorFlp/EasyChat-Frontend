@@ -1,28 +1,30 @@
-import React from "react";
-import SentMessage from "./SentMessage";
-import ReceivedMessage from "./ReceivedMessage";
+import React, { use, useEffect } from "react";
+import Message from "./Message";
 import { useState } from "react";
 
 const ChatMessages = ({ messages }) => {
-  //console.log("ChatMessages", messages);
+  const [sortedMessages, setSortedMessages] = useState([]);
+
+  useEffect(() => {
+    if (!messages || !messages.messages || !messages.messages.records) {
+      return;
+    }
+
+    const m = [...messages.messages.records];
+    m.sort(
+      (a, b) =>
+        new Date(Number(a.messageTimestamp) * 1000) -
+        new Date(Number(b.messageTimestamp) * 1000)
+    );
+    //console.log("sorted messages: " + JSON.stringify(m));
+    setSortedMessages(m);
+  }, [messages]);
   return (
     <div className="open_chat_body">
       <div className="open_chat_body_messages-container">
-        {messages
-          .sort(
-            (a, b) =>
-              new Date(Number(a.timestamp) * 1000) -
-              new Date(Number(b.timestamp) * 1000)
-          )
-          .map((msg, index) => {
-            if (msg.mode === "sent") {
-              //console.log("msg sent: " + JSON.stringify(msg.text.body));
-              return <SentMessage key={index} message={msg} />;
-            } else {
-              //console.log("msg received: " + JSON.stringify(msg));
-              return <ReceivedMessage key={index} message={msg} />;
-            }
-          })}
+        {sortedMessages.map((msg, index) => {
+          return <Message message={msg} />;
+        })}
       </div>
     </div>
   );

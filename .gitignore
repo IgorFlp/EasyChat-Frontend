@@ -23,3 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 src/config.js
+src/pages/EasyChat-Frontend.code-workspace
+chat.json
+buildEpush.bat
+
