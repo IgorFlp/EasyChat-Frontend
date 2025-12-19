@@ -1,25 +1,31 @@
-FROM node:20-alpine
-
-# Diretório de trabalho
+# Estágio 1: Build
+FROM node:20-alpine AS build
 WORKDIR /app
 
-# Copia arquivos de dependência
-COPY package.json package-lock.json ./
+# --- PARTE IMPORTANTE: VARIÁVEIS DE AMBIENTE ---
+ARG VITE_API_URL
+ARG VITE_SOCKET_URL
+ARG VITE_APP_NAME
+# Adicione outras ARGs se tiver mais variáveis
 
-# Instala dependências
+ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_SOCKET_URL=$VITE_SOCKET_URL
+ENV VITE_APP_NAME=$VITE_APP_NAME
+# -----------------------------------------------
+
+COPY package*.json ./
 RUN npm install
-
-# Copia o restante do projeto
 COPY . .
-
-# Build do Vite
 RUN npm run build
 
-# Instala servidor estático
-RUN npm install -g serve
+# Estágio 2: Produção (Nginx é muito mais leve que o 'serve')
+FROM nginx:stable-alpine
+# Copia o resultado do build (Vite usa 'dist') para a pasta do Nginx
+COPY --from=build /app/dist /usr/share/nginx/html
 
-# Porta interna do container
-EXPOSE 3000
+# Se você usa React Router (rotas tipo /login, /dashboard), 
+# descomente a linha abaixo para não dar 404 ao atualizar a página
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Serve o build
-CMD ["serve", "-s", "dist", "-l", "3000"]
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
