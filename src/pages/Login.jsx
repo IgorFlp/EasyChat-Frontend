@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_URL } from "../config";
+import { API_URL, SOCKET_URL, APP_NAME } from "../config";
 
 const Login = () => {
   const [user, setUser] = useState("");
@@ -28,6 +28,11 @@ const Login = () => {
       if (response.status === 200) {
         //console.log("Response:", response);
         //console.log("Cookies:", document.cookie);
+        const { instances } = response.data;
+        // Salva como String (LocalStorage só aceita string)
+        localStorage.setItem("user_instances", JSON.stringify(instances));
+        // Opcional: Salva a primeira ou a selecionada como "ativa"
+        localStorage.setItem("selected_instance", instances[0]);
 
         navigate("/chats");
       }

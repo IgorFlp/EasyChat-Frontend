@@ -2,7 +2,7 @@ import React from "react";
 import ChatHeader from "./ChatHeader";
 import ChatFooter from "./ChatFooter";
 import axios from "axios";
-import { API_URL, USER_INSTANCE } from "../config.js";
+import { API_URL } from "../config.js";
 import ChatMessagesContainer from "./ChatMessagesContainer";
 import { useState, useEffect } from "react";
 
@@ -18,7 +18,8 @@ export default function OpenChat({ chat, contact }) {
 
   const fetchMessages = async (remoteJid) => {
     try {
-      let url = `${API_URL}/chat/findMessages?instance=${USER_INSTANCE}`;
+      let instance = localStorage.getItem("selected_instance");
+      let url = `${API_URL}/chat/findMessages?instance=${instance}`;
       let init = {
         withCredentials: true,
         headers: {
@@ -38,7 +39,8 @@ export default function OpenChat({ chat, contact }) {
   const sendText = async (message) => {
     console.log("Sending message: ", message);
     try {
-      let url = `${API_URL}/sendText?instance=${USER_INSTANCE}`;
+      let instance = localStorage.getItem("selected_instance");
+      let url = `${API_URL}/sendText?instance=${instance}`;
       let init = {
         withCredentials: true,
         headers: {

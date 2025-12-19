@@ -12,7 +12,6 @@ import ContactEdit from "../components/ContactEdit.jsx";
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [contacts, setContacts] = useState([]);
-
   const [groupedArray, setGroupedArray] = useState([]);
   const [selectedIdentifier, setSelectedIdentifier] = useState(null);
   const [databases, setDatabases] = useState([]);
@@ -84,7 +83,7 @@ const ChatPage = () => {
     socket.on("new_message", handleNewMessage);
 
     const fetchChats = async () => {
-      let instance = "Damaq - Igor";
+      let instance = localStorage.getItem("selected_instance");
       const url = `${API_URL}/chat/findChats?instance=${instance}`;
       let chats = await axios.post(
         url,
@@ -103,7 +102,7 @@ const ChatPage = () => {
     };
     const fetchContacts = async () => {
       let contacts = [];
-      let instance = "Damaq - Igor";
+      let instance = localStorage.getItem("selected_instance");
       try {
         const url = `${API_URL}/chat/findContacts?instance=${instance}`;
         let ctts = await axios.post(
