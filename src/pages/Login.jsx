@@ -15,7 +15,7 @@ const Login = () => {
     //console.log(API_URL);
     try {
       const response = await axios.post(
-        API_URL + "/login",
+        API_URL + "/auth/login",
         { user, password },
         {
           withCredentials: true,

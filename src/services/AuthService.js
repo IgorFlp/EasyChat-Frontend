@@ -5,7 +5,7 @@ export const logout = async () => {
   try {
     // Chama o endpoint de logout no backend
     await axios.post(
-      `${API_URL}/logout`,
+      `${API_URL}/auth/logout`,
       {},
       {
         withCredentials: true,
@@ -25,7 +25,7 @@ export const logout = async () => {
 // Função para verificar se o usuário está autenticado
 export const checkAuth = async () => {
   try {
-    const response = await axios.get(`${API_URL}/me`, {
+    const response = await axios.get(`${API_URL}/auth/me`, {
       withCredentials: true,
     });
     return response.status === 200;
