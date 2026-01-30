@@ -1,67 +1,29 @@
-import React from "react";
+import React, { use } from "react";
 import ChatHeader from "./ChatHeader";
 import ChatFooter from "./ChatFooter";
 import axios from "axios";
 import { API_URL } from "../config.js";
 import ChatMessagesContainer from "./ChatMessagesContainer";
 import { useState, useEffect } from "react";
+import ChatPage from "../pages/chatpage.jsx";
 
-export default function OpenChat({ chat, contact }) {
+
+export default function OpenChat({ chat, contact, messages, onSendText }) {
+  
   const [isReady, setIsReady] = useState(false);
-  const [messages, setMessages] = useState([]);
-  useEffect(() => {
-    if (chat) {
+  //const [messages, setMessages] = useState([]);
+    
+useEffect(() => {
+    if (chat && messages) {
       setIsReady(true);
+    } else {
+      setIsReady(false);
     }
-    fetchMessages(chat.remoteJid);
-  }, [chat]);
+}, [chat, messages]);
 
-  const fetchMessages = async (remoteJid) => {
-    try {
-      let instance = localStorage.getItem("selected_instance");
-      let url = `${API_URL}/chat/findMessages?instance=${instance}`;
-      let init = {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      let body = { remoteJid: remoteJid };
-      const res = await axios.post(url, body, init);
-      const data = res.data;
-
-      setMessages(data);
-    } catch (error) {
-      console.error("Error fetching messages:", error);
-    }
-  };
-
-  const sendText = async (message) => {
-    console.log("Sending message: ", message);
-    try {
-      let instance = localStorage.getItem("selected_instance");
-      let url = `${API_URL}/sendText?instance=${instance}`;
-      let init = {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      let body = message;
-      const res = await axios.post(url, body, init).then((res) => res);
-      const data = res.data;
-      return data;
-    } catch (error) {
-      console.error("Error posting message:", error);
-      return null;
-    }
-  };
   const handleSendText = async (newMessage) => {
     newMessage.number = chat.remoteJid;
-    let res = await sendText(newMessage);
-    if (res) {
-      fetchMessages(chat.remoteJid);
-    }
+    onSendText(newMessage);
   };
 
   return (

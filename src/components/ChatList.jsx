@@ -9,14 +9,14 @@ const ChatList = ({ contacts, chats, onOpenChat }) => {
   };
   return (
     <>
-      {chats.map((chat, index) => {
+      {Object.entries(chats).map((chat, index) => {
         return (
           <ChatItem
             key={index}
             contacts={contacts}
-            chat={chat}
+            chat={chat[1]}
             onSelectChat={() => {
-              handleSelectChat(chat);
+              handleSelectChat(chat[1]);
             }}
           />
         );

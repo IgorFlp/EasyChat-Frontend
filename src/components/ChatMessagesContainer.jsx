@@ -6,11 +6,11 @@ const ChatMessages = ({ messages }) => {
   const [sortedMessages, setSortedMessages] = useState([]);
 
   useEffect(() => {
-    if (!messages || !messages.messages || !messages.messages.records) {
+    if (!messages) {
       return;
     }
 
-    const m = [...messages.messages.records];
+    const m = [...messages];
     m.sort(
       (a, b) =>
         new Date(Number(a.messageTimestamp) * 1000) -
